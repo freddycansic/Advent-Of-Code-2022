@@ -1,29 +1,36 @@
 use std::fs;
 use std::collections::HashSet;
+use std::hash::Hash;
 
-fn is_all_unique(string : &str) -> bool
+fn is_all_unique<T>(iter: impl Iterator<Item=T>) -> bool
+where T : Hash + Eq
 {
-    if string.chars().count() == 0 { return true; }
+    let vec : Vec<T> = iter.into_iter().collect();
+
+    if vec.len() == 0 { return true; }
 
     let mut unique_values = HashSet::new();
-    
-    for letter in string.chars()
-    {
-        if unique_values.contains(&letter) { return false; }
 
-        unique_values.insert(letter);
+    for item in vec.iter()
+    {
+        if unique_values.contains(&item) { return false; }
+
+        unique_values.insert(item);
     }
 
     return true;
 }
 
-fn find_unique_n(string : &str, count : usize) -> Option<usize>
+fn find_unique_n<T>(iter : impl Iterator<Item=T>, count : usize) -> Option<usize>
+where T : Hash + Eq
 {
-    for i in 0..string.len() - count - 1
-    {
-        let current_seq = &string[i..i+count];
+    let vec : Vec<T> = iter.into_iter().collect();
 
-        if is_all_unique(&current_seq)
+    for i in 0..vec.len() - count - 1
+    {
+        let current_seq = &vec[i..i+count];
+
+        if is_all_unique(current_seq.into_iter())
         {
             return Some(i);
         }
@@ -36,6 +43,6 @@ fn main()
 {
     let signal = fs::read_to_string("input.txt").expect("Could not find input.txt!");
 
-    println!("Part 1 : {}", find_unique_n(&signal, 4).unwrap() + 4);
-    println!("Part 2 : {}", find_unique_n(&signal, 14).unwrap() + 14);
+    println!("Part 1 : {}", find_unique_n(signal.chars(), 4).unwrap() + 4);
+    println!("Part 2 : {}", find_unique_n(signal.chars(), 14).unwrap() + 14);
 }
