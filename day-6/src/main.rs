@@ -26,7 +26,7 @@ where T : Hash + Eq
 {
     let vec : Vec<T> = iter.into_iter().collect();
 
-    for i in 0..vec.len() - count - 1
+    for i in 0..vec.len() - count + 1
     {
         let current_seq = &vec[i..i+count];
 
