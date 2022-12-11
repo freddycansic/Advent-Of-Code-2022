@@ -27,6 +27,7 @@ struct Movement
 
 fn main() 
 {
+    // parse input
     let input = fs::read_to_string("input.txt").expect("Could not find input.txt!");
 
     let (stacks, moves) = input.trim_end().split_once("\n\n").unwrap();
@@ -47,6 +48,7 @@ fn main()
 
     stacks.iter_mut().for_each(|row| row.reverse());
 
+    // parse moves
     let moves : Vec<&str> = moves.split("\n").collect();
     let moves : Vec<Vec<&str>> = moves.iter().map(|movement| movement.split(" ").collect()).collect();
 
